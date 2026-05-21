@@ -2,6 +2,24 @@
 
 Improved classifier for the [NLBSE'26 Tool Competition](https://nlbse2026.github.io/tools/) on code comment classification.
 
+## Quick Start
+
+### Docker
+
+```bash
+docker build -t nlbse26-classifier .
+docker run -v $(pwd)/models:/app/models nlbse26-classifier python train.py
+docker run -v $(pwd)/models:/app/models nlbse26-classifier python evaluate.py
+```
+
+### Local
+
+```bash
+pip install -r requirements.txt
+python train.py
+python evaluate.py
+```
+
 ## Approach
 
 **Model:** `microsoft/codebert-base` fine-tuned with multi-label binary cross-entropy loss.
@@ -44,7 +62,8 @@ The dataset is heavily imbalanced (e.g., `Collaborators` in Pharo has very few p
 
 **Overall avg F1 — Baseline: 0.6509 → Ours: 0.6841 (+0.033)**
 
-### Tradeoff
+## Tradeoff
+
 CodeBERT is larger than MiniLM, so inference is slower. The competition score (which penalizes runtime and FLOPs) is lower than the baseline. Given more time, knowledge distillation into a smaller model would recover the speed advantage while keeping the F1 gains.
 
 ## How to run
@@ -63,6 +82,7 @@ docker run --gpus all -v $(pwd)/models:/app/models nlbse26-classifier python eva
 ```
 
 CPU-only:
+
 ```bash
 docker run -v $(pwd)/models:/app/models nlbse26-classifier python train.py
 ```
@@ -76,11 +96,12 @@ python evaluate.py   # loads models/ and prints results
 ```
 
 ### Google Colab
+
 Open `nlbse26_codebert_classification.ipynb` in Google Colab with a **T4 GPU** runtime. All steps are self-contained and include outputs from our run.
 
 ## Repository structure
 
-```
+```text
 ├── Dockerfile
 ├── requirements.txt
 ├── train.py                              # training script
