@@ -66,36 +66,7 @@ The dataset is heavily imbalanced (e.g., `Collaborators` in Pharo has very few p
 
 CodeBERT is larger than MiniLM, so inference is slower. The competition score (which penalizes runtime and FLOPs) is lower than the baseline. Given more time, knowledge distillation into a smaller model would recover the speed advantage while keeping the F1 gains.
 
-## How to run
-
-### With Docker (recommended)
-
-```bash
-# 1. Build
-docker build -t nlbse26-classifier .
-
-# 2. Train (downloads dataset and model automatically)
-docker run --gpus all -v $(pwd)/models:/app/models nlbse26-classifier python train.py
-
-# 3. Evaluate
-docker run --gpus all -v $(pwd)/models:/app/models nlbse26-classifier python evaluate.py
-```
-
-CPU-only:
-
-```bash
-docker run -v $(pwd)/models:/app/models nlbse26-classifier python train.py
-```
-
-### Without Docker
-
-```bash
-pip install -r requirements.txt
-python train.py      # trains and saves to models/
-python evaluate.py   # loads models/ and prints results
-```
-
-### Google Colab
+## Google Colab
 
 Open `nlbse26_codebert_classification.ipynb` in Google Colab with a **T4 GPU** runtime. All steps are self-contained and include outputs from our run.
 
@@ -104,9 +75,9 @@ Open `nlbse26_codebert_classification.ipynb` in Google Colab with a **T4 GPU** r
 ```text
 ├── Dockerfile
 ├── requirements.txt
-├── train.py                              # training script
-├── evaluate.py                           # evaluation + competition score
-├── nlbse26_codebert_classification.ipynb # full walkthrough notebook (Colab-ready)
-├── results.csv                           # per-category results from our run
-└── models/                               # saved model weights (after training)
+├── train.py
+├── evaluate.py
+├── nlbse26_codebert_classification.ipynb
+├── results.csv
+└── models/
 ```
