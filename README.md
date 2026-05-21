@@ -19,7 +19,17 @@ pip install -r requirements.txt
 python train.py
 python evaluate.py
 ```
+## What I Changed
 
+1. **Replaced the baseline encoder:**  
+   SetFit (`paraphrase-MiniLM-L6-v2`) → CodeBERT (`microsoft/codebert-base`)
+
+2. **Added weighted BCE loss:**  
+   Per-label `pos_weight = neg_count / pos_count`, capped at 10×, to better handle class imbalance.
+
+3. **Kept the evaluation setup comparable:**  
+   Same train/test splits, same evaluation protocol, and the same combo-field preprocessing.
+   
 ## Approach
 
 **Model:** `microsoft/codebert-base` fine-tuned with multi-label binary cross-entropy loss.
@@ -62,13 +72,21 @@ The dataset is heavily imbalanced (e.g., `Collaborators` in Pharo has very few p
 
 **Overall avg F1 — Baseline: 0.6509 → Ours: 0.6841 (+0.033)**
 
-## Tradeoff
+## Efficiency Tradeoff
 
-CodeBERT is larger than MiniLM, so inference is slower. The competition score (which penalizes runtime and FLOPs) is lower than the baseline. Given more time, knowledge distillation into a smaller model would recover the speed advantage while keeping the F1 gains.
+While F1 improved over the baseline, CodeBERT is larger and computationally heavier than MiniLM.
+
+As a result, runtime and computational cost increased, creating a performance–efficiency tradeoff.
+
+## Compute Note
+
+The project can run on CPU, but transformer training is significantly slower.  
+For practical training and faster experimentation, Google Colab with a T4 GPU is recommended.
 
 ## Google Colab
 
-Open `nlbse26_codebert_classification.ipynb` in Google Colab with a **T4 GPU** runtime. All steps are self-contained and include outputs from our run.
+Open `nlbse26_codebert_classification.ipynb` in Google Colab.  
+The notebook is self-contained and includes outputs from our run.
 
 ## Repository structure
 
